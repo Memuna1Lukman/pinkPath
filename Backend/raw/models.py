@@ -1,8 +1,7 @@
-import enum
+import enum as Enum
 from sqlalchemy.orm import relationship
 from .database import Base
-from sqlalchemy import Column, Integer, String, Text, Boolean, Date, DateTime, ForeignKey, Enum
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Column, Integer, String, Text, Boolean, Date, DateTime, ForeignKey, Enu
 from sqlalchemy.sql import func
  
  
@@ -42,7 +41,7 @@ class Profiles(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, unique=True, index=True)
     age = Column(Integer, nullable=False)
     country = Column(String, nullable=False)
-    optional_risks = Column(JSONB, nullable=True)
+    optional_risks = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
  
