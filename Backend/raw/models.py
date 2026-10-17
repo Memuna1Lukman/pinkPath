@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, Text, Boolean, Date, DateTime, F
 from sqlalchemy.sql import func
  
  
-class ReminderType(str, enum.Enum):
+class ReminderType(str, Enum):
     SELF_EXAM = "self_exam"
     MAMMOGRAM = "mammogram"
 
