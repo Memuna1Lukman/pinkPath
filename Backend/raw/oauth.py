@@ -36,13 +36,12 @@ def verify_token(token:str,credential_exception):
         if token.startswith("Bearer "):
             token = token.replace("Bearer ","")
         payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
-        id:str = payload.get("owner_id")
+        id: int | None = payload.get("owner_id")
         if (id is None):
             raise credential_exception
         token_data = schemas.TokenData(id=id)
 
-    except JWTError as e:
-        print(e)
+    except JWTError:
         raise credential_exception
 
     return token_data
@@ -56,7 +55,7 @@ def get_current_user(token:str=Depends(oauth2_scheme),db:Session=Depends(get_db)
     if not token:
         raise credential_exception
     token=verify_token(token,credential_exception)
-    user = db.query(models.User).filter(models.User.id==token.id).first()
+    user = db.query(models.Users).filter(models.Users.id == token.id).first()
     if user is None:
         raise credential_exception
     return user

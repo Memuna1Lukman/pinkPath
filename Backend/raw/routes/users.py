@@ -14,13 +14,11 @@ router = APIRouter(tags=["Users"])
     response_model=schemas.UserCreated,
 )
 def create_user(user: schemas.UserPost, db: Session = Depends(get_db)):
-    # Build the user explicitly. Never pass client data straight into the
-    # model, and never let the client choose the role.
-    new_user = models.User(
+    # Build the user explicitly so only accepted client fields reach the DB.
+    new_user = models.Users(
         username=user.username,
-        phone=user.phone,
+        email=user.email,
         password=utils.get_password_hash(user.password),
-        role=models.UserRole.CUSTOMER,
     )
     try:
         db.add(new_user)
@@ -30,13 +28,13 @@ def create_user(user: schemas.UserPost, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Registration failed. This phone number is already registered.",
+            detail="Registration failed. This email address is already registered.",
         )
     return new_user
 
 
 @router.get("/me", response_model=schemas.UserMe)
-def get_me(current_user: models.User = Depends(oauth.get_current_user)):
+def get_me(current_user: models.Users = Depends(oauth.get_current_user)):
     # get_current_user already loaded this user from the database,
     # so there is no need to query again.
     return current_user

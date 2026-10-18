@@ -52,6 +52,26 @@ def get_reminders(
 
 
 
+@router.get("/upcoming", response_model=List[schemas.GetReminders])
+def get_upcoming_reminders(
+    days: int = Query(30, ge=1, le=365),
+    db: Session = Depends(get_db),
+    current_user: models.Users = Depends(oauth.get_current_user),
+):
+    # Includes overdue reminders too, since they are still "due".
+    cutoff = date.today() + timedelta(days=days)
+    return (
+        db.query(models.Reminders)
+        .filter(
+            models.Reminders.user_id == current_user.id,
+            models.Reminders.active.is_(True),
+            models.Reminders.next_due_date <= cutoff,
+        )
+        .order_by(models.Reminders.next_due_date)
+        .all()
+    )
+
+
 @router.get("/{reminder_id}",response_model=schemas.GetReminders)
 def get_reminder(
     reminder_id: int,
@@ -106,23 +126,3 @@ def update_reminder(
     db.commit()
     db.refresh(reminder)
     return reminder        
-
-
-@router.get("/upcoming", response_model=List[schemas.GetReminders])
-def get_upcoming_reminders(
-    days: int = Query(30, ge=1, le=365),
-    db: Session = Depends(get_db),
-    current_user: models.Users = Depends(oauth.get_current_user),
-):
-    # Includes overdue reminders too, since they are still "due".
-    cutoff = date.today() + timedelta(days=days)
-    return (
-        db.query(models.Reminders)
-        .filter(
-            models.Reminders.user_id == current_user.id,
-            models.Reminders.active.is_(True),
-            models.Reminders.next_due_date <= cutoff,
-        )
-        .order_by(models.Reminders.next_due_date)
-        .all()
-    )

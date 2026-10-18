@@ -21,10 +21,10 @@ def find_rules(country:str,age:int,db:Session):
     ).all()
 
 @router.get("",response_model=List[schemas.GetGuides])
-def get_guidelines(country:str,age:int,db:Session=Depends(get_db)):
+def get_guidelines(country: str, age: int, db: Session = Depends(get_db)):
     # i have to get the guides according country and age
     
-    return find_rules(db,country,age)
+    return find_rules(country, age, db)
 
 @router.get("/me", response_model=List[schemas.GetGuides])
 def get_my_guidelines(db: Session = Depends(get_db), current_user: models.Users = Depends(oauth.get_current_user)):
@@ -34,5 +34,4 @@ def get_my_guidelines(db: Session = Depends(get_db), current_user: models.Users 
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Create a profile first",
         )
-    return find_rules(db, profile.country, profile.age)
-
+    return find_rules(profile.country, profile.age, db)

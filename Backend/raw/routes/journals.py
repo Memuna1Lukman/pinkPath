@@ -11,24 +11,29 @@ router=APIRouter(
     prefix="/journal"
 )
 
-@router.get("/{id}",response_model=schemas.GetJournal)
-def get_journal(db:Session=Depends(get_db),current_user:models.Users=Depends(oauth.get_current_user)):
-    # is the id present
-    existing = db.query(models.JournalEntries).filter(models.JournalEntries.id == id).first()
+def get_owned_journal(journal_id: int, db: Session, current_user: models.Users) -> models.JournalEntries:
+    existing = db.query(models.JournalEntries).filter(
+        models.JournalEntries.id == journal_id,
+        models.JournalEntries.user_id == current_user.id,
+    ).first()
     if not existing:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Journal entry not found")
     return existing
 
-@router.patch("/{id}",response_model=schemas.PatchJournal)
+
+@router.get("/{journal_id}",response_model=schemas.GetJournal)
+def get_journal(journal_id: int, db:Session=Depends(get_db),current_user:models.Users=Depends(oauth.get_current_user)):
+    # is the id present
+    return get_owned_journal(journal_id, db, current_user)
+
+@router.patch("/{id}",response_model=schemas.GetJournal)
 def patch_journal(
     id:int,
-    update:schemas.PostJournal,
+    update:schemas.PatchJournal,
     db: Session = Depends(get_db),
     current_user:models.Users=Depends(oauth.get_current_user)
 ):
-    existing = db.query(models.JournalEntries).filter(models.JournalEntries.id == id).first()
-    if not existing:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Not found")
+    existing = get_owned_journal(id, db, current_user)
     for field, value in update.model_dump(exclude_unset=True).items():
         setattr(existing, field, value)
     db.commit()
@@ -41,9 +46,7 @@ def delete_journal(
     db: Session = Depends(get_db),
     current_user: models.Users = Depends(oauth.get_current_user)
 ):
-    existing = db.query(models.JournalEntries).filter(models.JournalEntries.id == id).first()
-    if not existing:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Not found")
+    existing = get_owned_journal(id, db, current_user)
     db.delete(existing)
     db.commit()
 

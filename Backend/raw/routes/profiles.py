@@ -2,7 +2,6 @@ from fastapi import Depends,HTTPException,status,APIRouter
 from sqlalchemy.orm import Session
 from ..database import get_db
 from .. import models,oauth,schemas
-from typing import List
 
 
 router = APIRouter(
@@ -10,7 +9,7 @@ router = APIRouter(
     prefix="/profile"
 )
 
-@router.get("",response_model=List[schemas.GetProfile])
+@router.get("",response_model=schemas.GetProfile)
 def get_my_profile(db:Session=Depends(get_db),current_user:models.Users=Depends(oauth.get_current_user)):
     profile = db.query(models.Profiles).filter(models.Profiles.user_id==current_user.id).first()
     if not profile:
@@ -33,7 +32,7 @@ def create_profile(profile:schemas.PostProfile,db:Session=Depends(get_db),curren
 
 
 @router.put("",response_model=schemas.PutProfile)
-def update_profile(id:int,profile:schemas.PostProfile,db:Session=Depends(get_db),current_user:models.Users=Depends(oauth.get_current_user)):
+def update_profile(profile:schemas.PostProfile,db:Session=Depends(get_db),current_user:models.Users=Depends(oauth.get_current_user)):
     existing = db.query(models.Profiles).filter(models.Profiles.user_id == current_user.id).first()
     if not existing:
         raise HTTPException(
@@ -47,5 +46,4 @@ def update_profile(id:int,profile:schemas.PostProfile,db:Session=Depends(get_db)
     db.commit()
     db.refresh(existing)
     return existing
-
 

@@ -10,7 +10,7 @@ router = APIRouter(
     prefix="/auth"
 )
 
-@router.post("/login")
+@router.post("/login", response_model=schemas.MessageResponse)
 def login_user(
     response:Response,
     user:OAuth2PasswordRequestForm=Depends(),db:Session = Depends(get_db)):
@@ -38,7 +38,7 @@ def login_user(
 
 
 
-@router.post("/")
+@router.post("/", response_model=schemas.MessageResponse)
 def logout_user (
     response:Response
 ):
