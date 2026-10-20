@@ -52,11 +52,11 @@ export default function Modal({ children, isOpen, onClose, title }) {
   if (!isOpen) return null
 
   return createPortal(
-    <div className="fixed inset-0 z-50 grid place-items-center p-4" role="presentation">
-      <button className="absolute inset-0 cursor-default bg-surface-950/40" type="button" aria-label="Close dialog" onClick={onClose} />
-      <section ref={dialogRef} className="relative z-10 w-full max-w-lg rounded-3xl border border-surface-200 bg-white p-6 shadow-xl" role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex="-1">
+    <div className="fixed inset-0 z-50 grid place-items-center overscroll-contain p-4" role="presentation">
+      <button className="absolute inset-0 cursor-default bg-surface-950/35 backdrop-blur-sm" type="button" aria-label="Close dialog" onClick={onClose} />
+      <section ref={dialogRef} className="relative z-10 w-full max-w-lg rounded-[2rem] border border-surface-200 bg-white p-6 shadow-float" role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex="-1">
         <div className="flex items-start justify-between gap-4">
-          <h2 id={titleId} className="text-xl font-bold text-surface-950">{title}</h2>
+          <h2 id={titleId} className="text-2xl font-bold text-surface-950">{title}</h2>
           <button className="-mr-2 -mt-2 inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl text-surface-700 hover:bg-surface-100" type="button" aria-label="Close dialog" onClick={onClose}>
             <span aria-hidden="true">×</span>
           </button>

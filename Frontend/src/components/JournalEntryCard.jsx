@@ -8,9 +8,9 @@ export default function JournalEntryCard({ entry, onDelete, isDeleting = false }
   const [confirmingDelete, setConfirmingDelete] = useState(false)
 
   return (
-    <Card className="flex flex-col gap-4">
+    <Card className="relative flex flex-col gap-4 overflow-visible before:absolute before:-left-[1.7rem] before:top-7 before:size-3 before:rounded-full before:bg-brand-500 before:ring-4 before:ring-surface-50 sm:before:-left-[2.2rem]">
       <div>
-        <p className="text-sm font-semibold text-brand-800">{formatDate(entry.entry_date)}</p>
+        <p className="text-sm font-bold text-brand-800">{formatDate(entry.entry_date)}</p>
         {entry.body_location && <p className="mt-1 text-sm font-medium text-surface-700">Area noted: {entry.body_location}</p>}
         <p className="mt-3 whitespace-pre-wrap text-surface-800">{entry.notes}</p>
       </div>

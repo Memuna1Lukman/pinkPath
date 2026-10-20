@@ -26,7 +26,7 @@ function NavigationLink({ item, compact = false }) {
   return (
     <NavLink
       to={item.to}
-      className={({ isActive }) => `inline-flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold motion-safe:transition-colors ${compact ? 'flex-col justify-center gap-1 px-2 text-xs' : ''} ${isActive ? 'bg-brand-50 text-brand-900' : 'text-surface-700 hover:bg-surface-100 hover:text-surface-950'}`}
+      className={({ isActive }) => `inline-flex min-h-11 items-center gap-3 rounded-2xl px-3 text-sm font-bold motion-safe:transition-[background-color,color,transform] ${compact ? 'flex-col justify-center gap-1 px-2 text-xs' : ''} ${isActive ? 'bg-brand-100 text-brand-900 shadow-sm' : 'text-surface-700 hover:bg-lavender-100 hover:text-surface-950'}`}
     >
       <Icon name={item.icon} />
       <span>{item.label}</span>
@@ -45,18 +45,18 @@ export default function Navbar() {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col border-r border-surface-200 bg-white p-4 md:flex" aria-label="Primary navigation">
-        <NavLink className="inline-flex min-h-11 items-center px-3 text-lg font-bold tracking-tight text-brand-900" to="/dashboard">PinkPath</NavLink>
-        <p className="px-3 pt-4 text-sm text-surface-600">{user?.email}</p>
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-72 flex-col border-r border-surface-200/80 bg-white/90 p-5 backdrop-blur md:flex" aria-label="Primary navigation">
+        <NavLink className="inline-flex min-h-11 items-center gap-2 px-3 font-display text-2xl font-bold tracking-tight text-brand-900" to="/dashboard"><span className="grid size-8 place-items-center rounded-xl bg-brand-600 font-sans text-sm text-white">P</span>PinkPath</NavLink>
+        <p className="px-3 pt-5 text-sm text-surface-600 break-all">{user?.email}</p>
         <nav className="mt-6 grid gap-1" aria-label="Main">
           {primaryLinks.map((item) => <NavigationLink key={item.to} item={item} />)}
         </nav>
         <div className="mt-auto grid gap-1 border-t border-surface-200 pt-4">
           <NavigationLink item={{ to: '/settings', label: 'Settings', icon: 'settings' }} />
-          <button className="inline-flex min-h-11 items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-surface-700 hover:bg-surface-100 hover:text-surface-950" type="button" onClick={handleLogout}>Sign out</button>
+          <button className="inline-flex min-h-11 items-center gap-3 rounded-2xl px-3 text-left text-sm font-bold text-surface-700 hover:bg-lavender-100 hover:text-surface-950" type="button" onClick={handleLogout}>Sign out</button>
         </div>
       </aside>
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-surface-200 bg-white px-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] pt-1 shadow-[0_-8px_24px_rgb(24_24_27/0.08)] md:hidden" aria-label="Main">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-surface-200/80 bg-white/95 px-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] pt-1 shadow-[0_-8px_24px_rgb(66_35_47/0.08)] backdrop-blur md:hidden" aria-label="Main">
         {primaryLinks.map((item) => <NavigationLink key={item.to} item={item} compact />)}
       </nav>
     </>

@@ -22,7 +22,7 @@ export default function Input({
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-semibold text-surface-900" htmlFor={id}>
+      <label className="block text-sm font-bold text-surface-800" htmlFor={id}>
         {label}{required && <span className="ml-1 text-brand-800" aria-hidden="true">*</span>}
       </label>
       <input
@@ -32,7 +32,7 @@ export default function Input({
         required={required}
         aria-invalid={Boolean(error) || undefined}
         aria-describedby={descriptionId}
-        className={`block min-h-11 w-full rounded-xl border bg-white px-3 py-2 text-base text-surface-950 placeholder:text-surface-500 disabled:cursor-not-allowed disabled:bg-surface-100 ${error ? 'border-red-600' : 'border-surface-300'} ${className}`}
+        className={`block min-h-12 w-full rounded-2xl border bg-white px-4 py-2.5 text-base text-surface-950 shadow-sm placeholder:text-surface-500 disabled:cursor-not-allowed disabled:bg-surface-100 ${error ? 'border-red-600' : 'border-surface-300 focus:border-brand-500'} ${className}`}
       />
       <FieldMessage error={error} hint={hint} id={id} />
     </div>
@@ -55,7 +55,7 @@ export function Textarea({
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-semibold text-surface-900" htmlFor={id}>
+      <label className="block text-sm font-bold text-surface-800" htmlFor={id}>
         {label}{required && <span className="ml-1 text-brand-800" aria-hidden="true">*</span>}
       </label>
       <textarea
@@ -65,7 +65,7 @@ export function Textarea({
         required={required}
         aria-invalid={Boolean(error) || undefined}
         aria-describedby={descriptionId}
-        className={`block min-h-28 w-full rounded-xl border bg-white px-3 py-2 text-base text-surface-950 placeholder:text-surface-500 disabled:cursor-not-allowed disabled:bg-surface-100 ${error ? 'border-red-600' : 'border-surface-300'} ${className}`}
+        className={`block min-h-32 w-full rounded-2xl border bg-white px-4 py-3 text-base leading-7 text-surface-950 shadow-sm placeholder:text-surface-500 disabled:cursor-not-allowed disabled:bg-surface-100 ${error ? 'border-red-600' : 'border-surface-300 focus:border-brand-500'} ${className}`}
       />
       <FieldMessage error={error} hint={hint} id={id} />
     </div>
